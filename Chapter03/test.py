@@ -3,19 +3,18 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import shutil
-from torchvision import transforms
-from torchvision import models
+# from torchvision import transforms
+# from torchvision import models
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch import optim
-from torchvision.datasets import ImageFolder
-from torchvision.utils import make_grid
+# from torchvision.datasets import ImageFolder
+# from torchvision.utils import make_grid
 import warnings
 warnings.filterwarnings("ignore")
 import time
-
 
 def imshow(inp):
     """Imshow for Tensor."""
@@ -26,9 +25,9 @@ def imshow(inp):
     inp = np.clip(inp, 0, 1)
     plt.imshow(inp)   
 
-path = 'data/Dog-Cat-Classifier/Data/Train_Data/'    
+path = 'Chapter03/'    
 
-dog_files = [f for f in glob.glob('Dog-Cat-Classifier/Data/Train_Data/dog/*.jpg')]
-cat_files = [f for f in glob.glob('Dog-Cat-Classifier/Data/Train_Data/cat/*.jpg')]
+dog_files = [f for f in glob.glob(path + 'Dog-Cat-Classifier/Data/Train_Data/dog/*.jpg')]
+cat_files = [f for f in glob.glob(path + 'Dog-Cat-Classifier/Data/Train_Data/cat/*.jpg')]
 files = dog_files + cat_files
 print(f'Total no of images {len(files)}')
