@@ -3,7 +3,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import shutil
-# from torchvision import transforms
+from torchvision import transforms
 # from torchvision import models
 import torch
 from torch.autograd import Variable
@@ -30,4 +30,40 @@ path = 'Chapter03/'
 dog_files = [f for f in glob.glob(path + 'Dog-Cat-Classifier/Data/Train_Data/dog/*.jpg')]
 cat_files = [f for f in glob.glob(path + 'Dog-Cat-Classifier/Data/Train_Data/cat/*.jpg')]
 files = dog_files + cat_files
+
 print(f'Total no of images {len(files)}')
+
+no_of_images = len(files)
+
+#셔플된 이미지 인덱스
+shuffle = np.random.permutation(no_of_images)
+
+if not os.path.isdir(os.path.join(path,'train')) :
+    os.mkdir(os.path.join(path,'train'))
+
+if not os.path.isdir(os.path.join(path,'valid')) :
+    os.mkdir(os.path.join(path,'valid'))
+
+for t in ['train', 'valid']:
+    for folder in ['dog/', 'cat/']:
+        if not os.path.isdir(os.path.join(path,t,folder)) : 
+            os.mkdir(os.path.join(path,t,folder))
+        else :
+            shutil.rmtree(os.path.join(path,t,folder)) #디렉토리 초기화
+            os.mkdir(os.path.join(path,t,folder))
+
+for i in shuffle[:250]:
+    folder = files[i].split('\\')[-1].split('.')[0]
+    image = files[i].split('\\')[-1]
+    os.rename(files[i],os.path.join(path,'valid',folder,image))
+
+is_cuda = False
+if torch.cuda.is_available():
+    is_cuda = True
+
+simple_transform = transforms.Compose([transforms.Resize((224,224))
+                                       ,transforms.ToTensor()
+                                       ,transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
+train = ImageFolder(os.path.join(path,'train'),simple_transform)
+valid = ImageFolder(os.path.join(path,'valid'),simple_transform)
