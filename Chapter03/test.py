@@ -98,8 +98,9 @@ valid = ImageFolder(os.path.join(path,'valid'),simple_transform)
 ######################################
 
 #Dataloader with worker
-train_data_gen = torch.utils.data.DataLoader(train, shuffle=True,batch_size=64, num_workers=3)
-valid_data_gen = torch.utils.data.DataLoader(valid, batch_size=64, num_workers=3)
+#window num_workers = 0
+train_data_gen = torch.utils.data.DataLoader(train, shuffle=True,batch_size=64, num_workers=0)
+valid_data_gen = torch.utils.data.DataLoader(valid, batch_size=64, num_workers=0)
 
 
 dataset_sizes = {'train':len(train_data_gen.dataset),'valid':len(valid_data_gen.dataset)}
