@@ -4,18 +4,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 import shutil
 from torchvision import transforms
-# from torchvision import models
+from torchvision import models
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch import optim
-# from torchvision.datasets import ImageFolder
-# from torchvision.utils import make_grid
+from torchvision.datasets import ImageFolder
+from torchvision.utils import make_grid
 import warnings
 warnings.filterwarnings("ignore")
 import time
 
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
+#torch install cpu or gpu
+#window install : https://lsjsj92.tistory.com/494
 def imshow(inp):
     """Imshow for Tensor."""
     inp = inp.numpy().transpose((1, 2, 0))
@@ -55,7 +59,15 @@ for t in ['train', 'valid']:
 for i in shuffle[:250]:
     folder = files[i].split('\\')[-1].split('.')[0]
     image = files[i].split('\\')[-1]
-    os.rename(files[i],os.path.join(path,'valid',folder,image))
+    #os.rename(files[i],os.path.join(path,'valid',folder,image))
+    shutil.copy(files[i], os.path.join(path,'valid',folder,image))
+
+
+for i in shuffle[251:501]:
+    folder = files[i].split('\\')[-1].split('.')[0]
+    image = files[i].split('\\')[-1]
+    # os.rename(files[i],os.path.join(path,'train',folder,image))
+    shutil.copy(files[i], os.path.join(path,'train',folder,image))
 
 is_cuda = False
 if torch.cuda.is_available():
@@ -68,3 +80,11 @@ simple_transform = transforms.Compose([transforms.Resize((224,224))
 
 train = ImageFolder(os.path.join(path,'train'),simple_transform)
 valid = ImageFolder(os.path.join(path,'valid'),simple_transform)
+
+print(train.class_to_idx)
+print(train.classes) 
+
+print(train.classes) 
+
+
+imshow(train[50][0])
