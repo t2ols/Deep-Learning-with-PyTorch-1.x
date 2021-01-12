@@ -59,6 +59,7 @@ for i in shuffle[:250]:
 
 is_cuda = False
 if torch.cuda.is_available():
+    print('CUDA available')
     is_cuda = True
 
 simple_transform = transforms.Compose([transforms.Resize((224,224))
