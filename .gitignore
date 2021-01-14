@@ -6,3 +6,4 @@ cifar*
 .vscode
 train/
 valid/
+data/
