@@ -10,16 +10,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+from torch.utils.tensorboard import SummaryWriter
+
 import os
 from multiprocessing import Process, freeze_support
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-# from torch.utils.tensorboard import SummaryWriter
-from tensorboardX import SummaryWriter
-
-# helper function to show an image
-# (used in the `plot_classes_preds` function below)
+# 이미지를 보여주기 위한 헬퍼(helper) 함수
+# (아래 `plot_classes_preds` 함수에서 사용)
 def matplotlib_imshow(img, one_channel=False):
     if one_channel:
         img = img.mean(dim=0)
@@ -29,6 +28,7 @@ def matplotlib_imshow(img, one_channel=False):
         plt.imshow(npimg, cmap="Greys")
     else:
         plt.imshow(np.transpose(npimg, (1, 2, 0)))
+
 
 class Net(nn.Module):
     def __init__(self):
@@ -51,7 +51,6 @@ class Net(nn.Module):
 
 if __name__ == '__main__':
     freeze_support()
-
 
     # transforms
     transform = transforms.Compose(
@@ -76,32 +75,30 @@ if __name__ == '__main__':
     testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                             shuffle=False, num_workers=2)
 
-    # constant for classes
+    # 분류 결과를 위한 상수
     classes = ('T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
             'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot')
 
-
-    net = Net()    
+    net = Net()        
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    # default `log_dir` is "runs" - we'll be more specific here
+    # 기본 `log_dir` 은 "runs"이며, 여기서는 더 구체적으로 지정하였습니다
     writer = SummaryWriter('runs/fashion_mnist_experiment_1')
 
-
-    # get some random training images
+    # 임의의 학습 이미지를 가져옵니다
     dataiter = iter(trainloader)
     images, labels = dataiter.next()
 
-    # create grid of images
+    # 이미지 그리드를 만듭니다.
     img_grid = torchvision.utils.make_grid(images)
 
-    # show images
+    # 이미지를 보여줍니다.
     matplotlib_imshow(img_grid, one_channel=True)
 
-    # write to tensorboard
+    # tensorboard에 기록합니다.
     writer.add_image('four_fashion_mnist_images', img_grid)
+
     writer.add_graph(net, images)
     writer.close()
-
