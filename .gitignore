@@ -7,3 +7,5 @@ cifar*
 train/
 valid/
 data/
+runs/
+mnist_train/
