@@ -10,3 +10,6 @@ data/
 runs/
 mnist_train/
 .ipynb_checkpoints
+*.zip
+*.png
+*.dot
